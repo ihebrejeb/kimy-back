@@ -4,15 +4,31 @@ const path = require("path");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const express = require("express");
-
+const socketio = require("socket.io");
+const http = require('http') ; 
 const app = express();
+const server = http.createServer(app) ; 
+ 
 
 const globalErrHandler = require("./controllers/errorController");
 const AppError = require("./utils/appError");
 
+
+const io = require('socket.io')(server, {
+  cors: {
+    origin: '*',
+  }
+});io.on('connection', socket => {
+  socket.on('message', ({ name, message }) => {
+    io.emit('message', { name, message })
+  })
+})
+
+
 /**
  * import routers here
  */
+const chatRouter = require("./routers/chatRouter") ; 
 const userRouter = require("./routers/userRouter");
 
 /**
@@ -38,7 +54,7 @@ mongoose
 /**
  * configure express app here
  */
-app.use(cors());
+ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
@@ -48,6 +64,7 @@ app.use(express.static(path.join(__dirname, "public")));
  */
 
 app.use("/user", userRouter);
+app.use ("/chat", chatRouter )
 
 /**
  *  handle undefined Routes
@@ -59,6 +76,6 @@ app.use("*", (req, res, next) => {
 
 app.use(globalErrHandler);
 
-app.listen(port, () => {
+server.listen(port, () => {
   console.log(`server listening at http://localhost:${port}`);
 });
