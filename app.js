@@ -8,7 +8,7 @@ const socketio = require("socket.io");
 const http = require('http') ; 
 const app = express();
 const server = http.createServer(app) ; 
- 
+ const bodyParser = require("body-parser") ; 
 
 const globalErrHandler = require("./controllers/errorController");
 const AppError = require("./utils/appError");
@@ -30,6 +30,8 @@ const io = require('socket.io')(server, {
  */
 const chatRouter = require("./routers/chatRouter") ; 
 const userRouter = require("./routers/userRouter");
+const coursesRouter = require("./routers/coursesRouter");
+
 
 /**
  * DB Config
@@ -54,17 +56,18 @@ mongoose
 /**
  * configure express app here
  */
+app.use(bodyParser.json({limit: "30mb" , extended : true}))
  app.use(cors());
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ limit: "30mb" , extended : true }));
 app.use(express.static(path.join(__dirname, "public")));
 
 /**
  * use routers here
  */
-
+app.use("/courses" , coursesRouter)
 app.use("/user", userRouter);
-app.use ("/chat", chatRouter )
+app.use ("/chat", chatRouter );
 
 /**
  *  handle undefined Routes
