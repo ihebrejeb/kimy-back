@@ -26,7 +26,6 @@ io.on("connection", (socket) => {
 /**
  * import routers here
  */
-const ActivityRouter = require("./routers/activitiesRouter");
 const chatRouter = require("./routers/chatRouter");
 const userRouter = require("./routers/userRouter");
 const coursesRouter = require("./routers/coursesRouter");
@@ -64,7 +63,6 @@ app.use(express.static(path.join(__dirname, "public")));
 /**
  * use routers here
  */
-app.use("/activities", ActivityRouter);
 app.use("/courses", coursesRouter);
 app.use("/user", userRouter);
 app.use("/chat", chatRouter);
