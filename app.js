@@ -4,36 +4,34 @@ const path = require("path");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const express = require("express");
-const socketio = require("socket.io");
-const http = require('http') ; 
+const http = require("http");
 const app = express();
-const server = http.createServer(app) ; 
- const bodyParser = require("body-parser") ; 
+const server = http.createServer(app);
+const bodyParser = require("body-parser");
 
 const globalErrHandler = require("./controllers/errorController");
 const AppError = require("./utils/appError");
 
-
-const io = require('socket.io')(server, {
+const io = require("socket.io")(server, {
   cors: {
-    origin: '*',
-  }
-});io.on('connection', socket => {
-  socket.on('message', ({ name, message }) => {
-    io.emit('message', { name, message })
-  })
-})
-
+    origin: "*",
+  },
+});
+io.on("connection", (socket) => {
+  socket.on("message", ({ name, message }) => {
+    io.emit("message", { name, message });
+  });
+});
 
 /**
  * import routers here
  */
-const ActivityRouter = require ('./routers/activitiesRouter') ; 
-const chatRouter = require("./routers/chatRouter") ; 
+const ActivityRouter = require("./routers/activitiesRouter");
+const chatRouter = require("./routers/chatRouter");
 const userRouter = require("./routers/userRouter");
 const coursesRouter = require("./routers/coursesRouter");
-
-
+const onlineSessionRouter = require("./routers/onlineSessionRouter");
+const twilioRouter = require("./routers/twilioRouter");
 /**
  * DB Config
  */
@@ -57,19 +55,21 @@ mongoose
 /**
  * configure express app here
  */
-app.use(bodyParser.json({limit: "30mb" , extended : true}))
+app.use(bodyParser.json({ limit: "30mb", extended: true }));
 app.use(cors());
 app.use(express.json());
-app.use(express.urlencoded({ limit: "30mb" , extended : true }));
+app.use(express.urlencoded({ limit: "30mb", extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 
 /**
  * use routers here
  */
-app.use("/activities", ActivityRouter)
-app.use("/courses" , coursesRouter)
+app.use("/activities", ActivityRouter);
+app.use("/courses", coursesRouter);
 app.use("/user", userRouter);
-app.use ("/chat", chatRouter );
+app.use("/chat", chatRouter);
+app.use("/osession", onlineSessionRouter);
+app.use("/twilio", twilioRouter);
 
 /**
  *  handle undefined Routes
