@@ -2,7 +2,9 @@
 const {
   jwt: { AccessToken },
 } = require("twilio");
-
+const accountSid = process.env.TWILIO_ACCOUNT_SID;
+const authToken = process.env.TWILIO_AUTH_TOKEN;
+const client = require("twilio")(accountSid, authToken);
 const VideoGrant = AccessToken.VideoGrant;
 const MAX_ALLOWED_SESSION_DURATION = 14400;
 const express = require("express");
@@ -27,4 +29,64 @@ router.route("/token").post(function (request, response) {
   // Serialize the token to a JWT string.
   response.send(JSON.stringify({ token: token.toJwt() }));
 });
+router.route("/roomStatus/:id").get(function (request, response) {
+  const { id } = request.params;
+
+  client.video
+    .rooms(id)
+    .fetch()
+    .then((room) => {
+      response.json(room.status);
+    })
+    .catch((err) => {
+      response.json("off");
+    });
+});
+router.route("/composevideo/:roomId").get(function (request, response) {
+  const { roomId } = request.params;
+
+  client.video.compositions
+    .create({
+      roomSid: roomId,
+      audioSources: "*",
+      videoLayout: {
+        grid: {
+          video_sources: ["*"],
+        },
+      },
+      format: "mp4",
+    })
+    .then((composition) => {
+      res.json(composition);
+    })
+    .catch((err) => {
+      res.json(err);
+    });
+});
+router.route("/getVideo/:roomId").get((req, res) => {
+  const { roomId } = req.params;
+  client.video.compositions
+    .list({
+      roomSid: roomId,
+    })
+    .then((compositions) => {
+      let link = compositions[0].links.media;
+      client
+        .request({
+          method: "GET",
+          uri: link,
+        })
+        .then((response) => {
+          res.send(response);
+        })
+        .catch((error) => {
+          console.log("Error fetching /Media resource " + error);
+          res.send(error);
+        });
+    })
+    .catch((err) => {
+      res.send(err);
+    });
+});
+
 module.exports = router;

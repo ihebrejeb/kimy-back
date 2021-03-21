@@ -29,12 +29,12 @@ io.on("connection", (socket) => {
 const chatRouter = require("./routers/chatRouter");
 const userRouter = require("./routers/userRouter");
 const coursesRouter = require("./routers/coursesRouter");
-const onlineSessionRouter = require("./routers/onlineSessionRouter");
+const roomsRouter = require("./routers/roomsRouter");
 const twilioRouter = require("./routers/twilioRouter");
 /**
  * DB Config
  */
-const port = process.env.PORT || 4000;
+const port = process.env.PORT || 5000;
 const db = process.env.DATABASE;
 
 mongoose
@@ -66,7 +66,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/courses", coursesRouter);
 app.use("/user", userRouter);
 app.use("/chat", chatRouter);
-app.use("/osession", onlineSessionRouter);
+app.use("/rooms", roomsRouter);
 app.use("/twilio", twilioRouter);
 
 /**
