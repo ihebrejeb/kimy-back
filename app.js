@@ -26,13 +26,14 @@ io.on("connection", (socket) => {
 /**
  * import routers here
  */
- const ForumRouter = require("./routers/ForumRouter");
+const ForumRouter = require("./routers/ForumRouter");
 
 const chatRouter = require("./routers/chatRouter");
 const userRouter = require("./routers/userRouter");
 const coursesRouter = require("./routers/coursesRouter");
 const roomsRouter = require("./routers/roomsRouter");
 const twilioRouter = require("./routers/twilioRouter");
+const attendanceRouter = require("./routers/attendanceRouter");
 /**
  * DB Config
  */
@@ -65,14 +66,14 @@ app.use(express.static(path.join(__dirname, "public")));
 /**
  * use routers here
  */
- app.use("/forum", ForumRouter);
+app.use("/forum", ForumRouter);
 
 app.use("/courses", coursesRouter);
 app.use("/user", userRouter);
 app.use("/chat", chatRouter);
 app.use("/rooms", roomsRouter);
 app.use("/twilio", twilioRouter);
-
+app.use("/attendance", attendanceRouter);
 /**
  *  handle undefined Routes
  */
