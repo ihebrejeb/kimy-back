@@ -41,9 +41,7 @@ exports.updateOne = (Model) => async (req, res, next) => {
 
     res.status(200).json({
       status: "success",
-      data: {
-        doc,
-      },
+      data: doc     
     });
   } catch (error) {
     next(error);
@@ -56,9 +54,8 @@ exports.createOne = (Model) => async (req, res, next) => {
 
     res.status(201).json({
       status: "success",
-      data: {
-        doc,
-      },
+      data: doc
+     
     });
   } catch (error) {
     next(error);
@@ -80,9 +77,7 @@ exports.getOne = (Model) => async (req, res, next) => {
 
     res.status(200).json({
       status: "success",
-      data: {
-        doc,
-      },
+      data: doc
     });
   } catch (error) {
     next(error);
@@ -98,9 +93,7 @@ exports.getAll = (Model) => async (req, res, next) => {
     res.status(200).json({
       status: "success",
       results: doc.length,
-      data: {
-        data: doc,
-      },
+      data: doc,
     });
   } catch (error) {
     next(error);
