@@ -11,11 +11,30 @@ router.route("/").get(ForumController.getAllforums)
                 .post(ForumController.createforums)
 router
   .route("/:id")
-  .get(ForumController.getforums)
+//   .get(ForumController.getforums)
   .patch(ForumController.updateforums)
   .delete(ForumController.deleteforums);
   let Filter = require('bad-words')
 
+  router.route('/:id').get(
+    async (req, res, next) => {
+        try {
+            const forum = await forums.findById(req.params.id);
+            if (!forum) {
+                return res.status(404).json({ msg: 'Post not found' })
+            }
+            forum.views = forum.views + 1;
+            console.log("views  incremented to " + forum.views)
+            forum.save();
+            res.status(200).json({
+                status: "success",
+                data: forum
+              });
+            
+        } catch (error) {
+           next(error)
+        }
+    });
   
   router.route('/comment/:id').post([ [
     check('text', 'Text is required').not().isEmpty()
