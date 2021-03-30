@@ -37,7 +37,7 @@ const attendanceRouter = require("./routers/attendanceRouter");
 /**
  * DB Config
  */
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 4000;
 const db = process.env.DATABASE;
 
 mongoose
