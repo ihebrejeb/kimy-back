@@ -42,12 +42,19 @@ const ForumSchema = new Schema({
         type: Number,
         default: 0
     },
+    like : {
+        type : Number,
+        default : 0
+    },
 
     likes: [
         {
             user: {
                 type: Schema.Types.ObjectId,
                 ref: 'User'
+            },
+            size: {
+                type: Number
             }
         }
     ],
