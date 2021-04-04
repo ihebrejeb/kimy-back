@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const CourseActivity = mongoose.Schema({
   title: String,
   file: String,
+  video: String,
   description: String,
   nbSeances: Number,
   ressources: String,
