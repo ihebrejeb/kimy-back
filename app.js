@@ -4,7 +4,6 @@ const path = require("path");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const express = require("express");
-const socketio = require("socket.io");
 const http = require("http");
 const app = express();
 const server = http.createServer(app);
@@ -31,7 +30,10 @@ const chatRouter = require("./routers/chatRouter");
 const userRouter = require("./routers/userRouter");
 const coursesRouter = require("./routers/coursesRouter");
 const coursesActivityRouter = require("./routers/CourseActivityRouter");
-
+const ForumRouter = require("./routers/ForumRouter");
+const roomsRouter = require("./routers/roomsRouter");
+const twilioRouter = require("./routers/twilioRouter");
+const attendanceRouter = require("./routers/attendanceRouter");
 /**
  * DB Config
  */
@@ -64,11 +66,15 @@ app.use(express.static(path.join(__dirname, "public")));
 /**
  * use routers here
  */
+
+app.use("/Activity", coursesActivityRouter);
+app.use("/forum", ForumRouter);
 app.use("/courses", coursesRouter);
 app.use("/user", userRouter);
 app.use("/chat", chatRouter);
-app.use("/Activity", coursesActivityRouter);
-
+app.use("/rooms", roomsRouter);
+app.use("/twilio", twilioRouter);
+app.use("/attendance", attendanceRouter);
 /**
  *  handle undefined Routes
  */
