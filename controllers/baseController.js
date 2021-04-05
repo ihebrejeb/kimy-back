@@ -17,7 +17,7 @@ exports.deleteOne = (Model) => async (req, res, next) => {
     res.status(204).json({
       status: "success",
       data: null,
-    });
+    }); 
   } catch (error) {
     next(error);
   }
