@@ -2,14 +2,16 @@ const mongoose = require("mongoose");
 
 const CourseActivity = mongoose.Schema({
   title: String,
-  file: String,
-  video: String,
+  files: [{
+            url:String,
+           name:String
+          }],
+  videos: [{ type: mongoose.Schema.Types.ObjectId, ref: "room" }],
   description: String,
   nbSeances: Number,
   ressources: String,
-
-  rate: Number,
-  comment: String,
+  comments: [{content:String,date:{type:Date,default:Date.now()}}],
+  date: {type:Date,default:Date.now()}
 });
 
 const CourseActivities = mongoose.model("CourseActivity", CourseActivity);
