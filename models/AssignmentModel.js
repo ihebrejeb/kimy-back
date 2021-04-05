@@ -1,16 +1,25 @@
 const mongoose = require("mongoose");
 
 const Assignment = mongoose.Schema({
+  activity: {
+                type: Schema.Types.ObjectId,
+                ref: 'CourseActivity',
+            },
   title: String,
   assignmentFile: String,
-  workFile : String , 
-  correctionFile : String 
+  workFiles : [
+    {user: {type: Schema.Types.ObjectId, ref: 'User'},
+     file:{url:String,
+           date:{type: Date,default: Date.now}
+          }
+    }], 
+  correctionFile : String ,
   description: String,
  dateCreation: {
     type: Date,
     default: new Date(),
   },
-  dateLimite : Date 
+  dateLimite : Date ,
   
   comment: String,
 });
