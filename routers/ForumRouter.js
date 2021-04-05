@@ -3,6 +3,7 @@ var router = express.Router();
 const { check , validationResult} = require('express-validator')
 const forums = require("../models/ForumModel");
 const mongoose = require("mongoose"); 
+var cron = require('node-cron');
 
 const ForumController = require("../controllers/ForumController");
 
@@ -154,7 +155,16 @@ router.route('/rate/:id').post( async (req, res) => {
     }
 })
 
+// cron.schedule('* * * * *', async function () {
 
+//     console.log('run every 60 sec')
+//     const forum = await forums.find();
+//     forum.forEach(e => {
+//         if (e.avg < 3) {
+//             e.remove()
+//         }
+//     });
+// })
 
  
 module.exports = router;
