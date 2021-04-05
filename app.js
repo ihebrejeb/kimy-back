@@ -34,6 +34,7 @@ const ForumRouter = require("./routers/ForumRouter");
 const roomsRouter = require("./routers/roomsRouter");
 const twilioRouter = require("./routers/twilioRouter");
 const attendanceRouter = require("./routers/attendanceRouter");
+const livequizzRouter = require("./routers/livequizzRouter");
 /**
  * DB Config
  */
@@ -71,6 +72,7 @@ app.use("/Activity", coursesActivityRouter);
 app.use("/forum", ForumRouter);
 app.use("/courses", coursesRouter);
 app.use("/user", userRouter);
+app.use("/livequizz", livequizzRouter);
 app.use("/chat", chatRouter);
 app.use("/rooms", roomsRouter);
 app.use("/twilio", twilioRouter);
