@@ -76,7 +76,7 @@ app.use("/chat", chatRouter);
 app.use("/rooms", roomsRouter);
 app.use("/twilio", twilioRouter);
 app.use("/attendance", attendanceRouter);
-app.use("assignments" ,assignmentsRouter)
+app.use("/assignments" ,assignmentsRouter)
 /**
  *  handle undefined Routes
  */

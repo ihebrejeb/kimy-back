@@ -7,6 +7,8 @@ const CourseActivity = mongoose.Schema({
            name:String
           }],
   videos: [{ type: mongoose.Schema.Types.ObjectId, ref: "room" }],
+    assignments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Assignment" }],
+
   description: String,
   nbSeances: Number,
   ressources: String,
