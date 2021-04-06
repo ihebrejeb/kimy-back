@@ -7,14 +7,20 @@ const Assignment = mongoose.Schema({
                 ref: 'CourseActivity',
             },
   title: String,
-  assignmentFile: String,
+  Assignmentfile: [{
+            url:String,
+           name:String
+          }],
   workFiles : [
     {user: {type: Schema.Types.ObjectId, ref: 'User'},
      file:{url:String,
            date:{type: Date,default: Date.now}
           }
     }], 
-  correctionFile : String ,
+  CorrectionFile: [{
+            url:String,
+           name:String
+          }],
   description: String,
  dateCreation: {
     type: Date,
@@ -22,7 +28,28 @@ const Assignment = mongoose.Schema({
   },
   dateLimite : Date ,
   
-  comment: String,
+ comments: [
+        {
+            user: {
+                type: Schema.Types.ObjectId,
+                ref: 'User'
+            },
+            text: {
+                type: String,
+                required: true
+            },
+            name: {
+                type: String
+            },
+            avatar: {
+                type: String
+            },
+            date: {
+                type: Date,
+                default: Date.now
+            }
+        }
+    ],
 });
 
 const Assignments = mongoose.model("Assignment", Assignment);
