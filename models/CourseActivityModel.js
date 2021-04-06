@@ -13,6 +13,6 @@ const CourseActivity = mongoose.Schema({
   comments: [{content:String,date:{type:Date,default:Date.now()}}],
   date: {type:Date,default:Date.now()}
 });
-
+/// missing the course ID 
 const CourseActivities = mongoose.model("CourseActivity", CourseActivity);
 module.exports = CourseActivities;
