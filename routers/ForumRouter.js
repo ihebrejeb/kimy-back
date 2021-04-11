@@ -160,7 +160,7 @@ router.route('/rate/:id').post( async (req, res) => {
 //     console.log('run every 60 sec')
 //     const forum = await forums.find();
 //     forum.forEach(e => {
-//         if (e.avg < 3) {
+//         if (e.avg < 1) {
 //             e.remove()
 //         }
 //     });

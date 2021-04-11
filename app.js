@@ -12,16 +12,7 @@ const bodyParser = require("body-parser");
 const globalErrHandler = require("./controllers/errorController");
 const AppError = require("./utils/appError");
 
-const io = require("socket.io")(server, {
-  cors: {
-    origin: "*",
-  },
-});
-io.on("connection", (socket) => {
-  socket.on("message", ({ name, message }) => {
-    io.emit("message", { name, message });
-  });
-});
+
 
 /**
  * import routers here
@@ -35,12 +26,29 @@ const roomsRouter = require("./routers/roomsRouter");
 const twilioRouter = require("./routers/twilioRouter");
 const attendanceRouter = require("./routers/attendanceRouter");
 const livequizzRouter = require("./routers/livequizzRouter");
+const { connect } = require("./routers/chatRouter");
 /**
  * DB Config
  */
+ const  messages  = require("./models/messagesModel");
+
 const port = process.env.PORT || 4000;
 const db = process.env.DATABASE;
 
+const io = require("socket.io")(server, {
+  cors: {
+    origin: "*",
+  },
+});
+io.on("connection", (socket) => {
+  socket.on("message", ({ name, message }) => {
+    io.emit("message", { name, message });
+
+    let chatmessage = new messages ({name : name , message: message});
+    chatmessage.save()
+  });
+ 
+});
 mongoose
   .connect(db, {
     useNewUrlParser: true,
