@@ -154,6 +154,15 @@ router.route('/rate/:id').post( async (req, res) => {
         res.status(500).send('server Error')
     }
 })
+router.route('/search/:search').get (  async (req,res) =>{
+    try {
+    const {search} = req.params;
+    const doc = await forums.find({$or:[{title: {'$regex' : search, '$options' : 'i'}}]});
+      res.status(200).json(doc);
+    } catch (error) {
+      next(error);
+    }
+})
 
 // cron.schedule('* * * * *', async function () {
 
