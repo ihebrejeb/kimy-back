@@ -10,6 +10,19 @@ const ForumController = require("../controllers/ForumController");
 
 router.route("/").get(ForumController.getAllforums) 
                 .post(ForumController.createforums)
+
+
+                
+router.route("/sort").get( async ( req, res, next) => {
+    try {
+
+      const doc = await forums.find().sort({ like: -1 });
+
+      res.status(200).json(doc);
+    } catch (error) {
+      next(error);
+    }
+  })                           
 router
   .route("/:id")
 //   .get(ForumController.getforums)
@@ -36,7 +49,7 @@ router
            next(error)
         }
     });
-  
+    
   router.route('/comment/:id').post([ [
     check('text', 'Text is required').not().isEmpty()
 ]], async (req, res, next) => {
@@ -163,6 +176,9 @@ router.route('/search/:search').get (  async (req,res) =>{
       next(error);
     }
 })
+
+
+
 
 // cron.schedule('* * * * *', async function () {
 
