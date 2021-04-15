@@ -22,6 +22,13 @@ io.on("connection", (socket) => {
     io.emit("message", { name, message });
   });
 });
+io.on("connection", (socket) => {
+  console.log("User Online");
+
+  socket.on("canvas-data", (data) => {
+    socket.broadcast.emit("canvas-data", data);
+  });
+});
 
 /**
  * import routers here
@@ -34,7 +41,7 @@ const ForumRouter = require("./routers/ForumRouter");
 const roomsRouter = require("./routers/roomsRouter");
 const twilioRouter = require("./routers/twilioRouter");
 const attendanceRouter = require("./routers/attendanceRouter");
-const assignmentsRouter = require("./routers/AssignmentRouter")
+const assignmentsRouter = require("./routers/AssignmentRouter");
 /**
  * DB Config
  */
@@ -76,7 +83,7 @@ app.use("/chat", chatRouter);
 app.use("/rooms", roomsRouter);
 app.use("/twilio", twilioRouter);
 app.use("/attendance", attendanceRouter);
-app.use("/assignments" ,assignmentsRouter)
+app.use("/assignments", assignmentsRouter);
 /**
  *  handle undefined Routes
  */
