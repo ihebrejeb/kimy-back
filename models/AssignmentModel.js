@@ -7,12 +7,8 @@ const Assignment = mongoose.Schema({
   //                 ref: 'CourseActivity',
   //             },
   title: String,
-  Assignmentfile: [
-    {
-      url: String,
-      name: String,
-    },
-  ],
+  Assignmentfile: 
+    String,
   //   workFiles : [
   //     {user: {type: Schema.Types.ObjectId, ref: 'User'},
   //      file:{url:String,
