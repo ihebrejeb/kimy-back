@@ -14,4 +14,16 @@ router
   .patch(Activities.UpdateActivity)
   .get(Activities.GetActivity);
 
+  
+router.route("/search/:search").get(async (req, res) => {
+  try {
+    const { search } = req.params;
+    const doc = await forums.find({
+      $or: [{ title: { $regex: search, $options: "i" } }],
+    });
+    res.status(200).json(doc);
+  } catch (error) {
+    next(error);
+  }
+});
 module.exports = router;
