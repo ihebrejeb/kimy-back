@@ -29,6 +29,7 @@ const Assignment = mongoose.Schema({
     default: new Date(),
     require: true,
   },
+
   //  comments: [
   //         {
   //             user: {
@@ -52,6 +53,7 @@ const Assignment = mongoose.Schema({
   //         }
   //     ],
 });
+
 
 const Assignments = mongoose.model("Assignment", Assignment);
 module.exports = Assignments;

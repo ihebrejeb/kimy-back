@@ -3,12 +3,26 @@ var router = express.Router();
 const { check , validationResult} = require('express-validator')
 const forums = require("../models/ForumModel");
 const mongoose = require("mongoose"); 
+var cron = require('node-cron');
 
 const ForumController = require("../controllers/ForumController");
 
 
 router.route("/").get(ForumController.getAllforums) 
                 .post(ForumController.createforums)
+
+
+                
+router.route("/sort").get( async ( req, res, next) => {
+    try {
+
+      const doc = await forums.find().sort({ like: -1 });
+
+      res.status(200).json(doc);
+    } catch (error) {
+      next(error);
+    }
+  })                           
 router
   .route("/:id")
 //   .get(ForumController.getforums)
@@ -35,7 +49,7 @@ router
            next(error)
         }
     });
-  
+    
   router.route('/comment/:id').post([ [
     check('text', 'Text is required').not().isEmpty()
 ]], async (req, res, next) => {
@@ -153,8 +167,29 @@ router.route('/rate/:id').post( async (req, res) => {
         res.status(500).send('server Error')
     }
 })
+router.route('/search/:search').get (  async (req,res) =>{
+    try {
+    const {search} = req.params;
+    const doc = await forums.find({$or:[{title: {'$regex' : search, '$options' : 'i'}}]});
+      res.status(200).json(doc);
+    } catch (error) {
+      next(error);
+    }
+})
 
 
+
+
+// cron.schedule('* * * * *', async function () {
+
+//     console.log('run every 60 sec')
+//     const forum = await forums.find();
+//     forum.forEach(e => {
+//         if (e.avg < 1) {
+//             e.remove()
+//         }
+//     });
+// })
 
  
 module.exports = router;

@@ -14,7 +14,10 @@ const CourseActivity = mongoose.Schema({
   description: String,
   nbSeances: Number,
   ressources: String,
+
 comments: [
+
+
         {
             user: {
                 type: Schema.Types.ObjectId,
@@ -27,15 +30,20 @@ comments: [
             name: {
                 type: String
             },
+
             avatar: {
                 type: String
             },
+
             date: {
                 type: Date,
                 default: Date.now
             }
         }
+
     ],  date: {type:Date,default:Date.now()}
+
+
 });
 /// missing the course ID 
 const CourseActivities = mongoose.model("CourseActivity", CourseActivity);

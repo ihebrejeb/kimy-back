@@ -5,7 +5,7 @@ const bcrypt = require("bcryptjs");
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: [true, "Please fill your name"],
+    required: [true, "Please fill your username"],
   },
   email: {
     type: String,
@@ -14,10 +14,12 @@ const userSchema = new mongoose.Schema({
     lowercase: true,
     validate: [validator.isEmail, " Please provide a valid email"],
   },
-  address: {
-    type: String,
-    trim: true,
-  },
+  birthdate: {
+    type : Date ,
+    default : new Date()
+
+},
+selectedFile : String ,
   password: {
     type: String,
     required: [true, "Please fill your password"],
@@ -35,7 +37,7 @@ const userSchema = new mongoose.Schema({
       message: "Your password and confirmation password are not the same",
     },
   },
-  role: {
+ /*  role: {
     type: String,
     enum: ["admin", "teacher", "student"],
     default: "student",
@@ -44,7 +46,7 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: true,
     select: false,
-  },
+  }, */
 });
 
 // encrypt the password using 'bcryptjs'
