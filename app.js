@@ -12,16 +12,10 @@ const bodyParser = require("body-parser");
 const globalErrHandler = require("./controllers/errorController");
 const AppError = require("./utils/appError");
 
-
 const io = require("socket.io")(server, {
   cors: {
     origin: "*",
   },
-});
-io.on("connection", (socket) => {
-  socket.on("message", ({ name, message }) => {
-    io.emit("message", { name, message });
-  });
 });
 io.on("connection", (socket) => {
   console.log("User Online");
@@ -30,7 +24,6 @@ io.on("connection", (socket) => {
     socket.broadcast.emit("canvas-data", data);
   });
 });
-
 
 /**
  * import routers here
@@ -50,24 +43,18 @@ const { connect } = require("./routers/chatRouter");
 /**
  * DB Config
  */
- const  messages  = require("./models/messagesModel");
+const messages = require("./models/messagesModel");
 
 const port = process.env.PORT || 4000;
 const db = process.env.DATABASE;
 
-const io = require("socket.io")(server, {
-  cors: {
-    origin: "*",
-  },
-});
 io.on("connection", (socket) => {
   socket.on("message", ({ name, message }) => {
     io.emit("message", { name, message });
 
-    let chatmessage = new messages ({name : name , message: message});
-    chatmessage.save()
+    let chatmessage = new messages({ name: name, message: message });
+    chatmessage.save();
   });
- 
 });
 mongoose
   .connect(db, {

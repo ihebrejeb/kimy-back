@@ -7,23 +7,20 @@ var cron = require("node-cron");
 
 const ForumController = require("../controllers/ForumController");
 
+router
+  .route("/")
+  .get(ForumController.getAllforums)
+  .post(ForumController.createforums);
 
+router.route("/sort").get(async (req, res, next) => {
+  try {
+    const doc = await forums.find().sort({ like: -1 });
 
-router.route("/").get(ForumController.getAllforums) 
-                .post(ForumController.createforums)
-
-
-                
-router.route("/sort").get( async ( req, res, next) => {
-    try {
-
-      const doc = await forums.find().sort({ like: -1 });
-
-      res.status(200).json(doc);
-    } catch (error) {
-      next(error);
-    }
-  })                           
+    res.status(200).json(doc);
+  } catch (error) {
+    next(error);
+  }
+});
 
 router
   .route("/:id")
@@ -32,34 +29,11 @@ router
   .delete(ForumController.deleteforums);
 let Filter = require("bad-words");
 
-
-  router.route('/:id').get(
-    async (req, res, next) => {
-        try {
-            const forum = await forums.findById(req.params.id);
-            if (!forum) {
-                return res.status(404).json({ msg: 'Post not found' })
-            }
-            forum.views = forum.views + 1;
-            console.log("views  incremented to " + forum.views)
-            forum.save();
-            res.status(200).json({
-                status: "success",
-                data: forum
-              });
-            
-        } catch (error) {
-           next(error)
-        }
-    });
-    
-  router.route('/comment/:id').post([ [
-    check('text', 'Text is required').not().isEmpty()
-]], async (req, res, next) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() })
-
+router.route("/:id").get(async (req, res, next) => {
+  try {
+    const forum = await forums.findById(req.params.id);
+    if (!forum) {
+      return res.status(404).json({ msg: "Post not found" });
     }
     forum.views = forum.views + 1;
     console.log("views  incremented to " + forum.views);
@@ -72,6 +46,25 @@ let Filter = require("bad-words");
     next(error);
   }
 });
+
+router
+  .route("/comment/:id")
+  .post(
+    [[check("text", "Text is required").not().isEmpty()]],
+    async (req, res, next) => {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+      }
+      forum.views = forum.views + 1;
+      console.log("views  incremented to " + forum.views);
+      forum.save();
+      res.status(200).json({
+        status: "success",
+        data: forum,
+      });
+    }
+  );
 
 router
   .route("/comment/:id")
@@ -187,19 +180,17 @@ router.route("/rate/:id").post(async (req, res) => {
   }
 });
 
-})
-router.route('/search/:search').get (  async (req,res) =>{
-    try {
-    const {search} = req.params;
-    const doc = await forums.find({$or:[{title: {'$regex' : search, '$options' : 'i'}}]});
-      res.status(200).json(doc);
-    } catch (error) {
-      next(error);
-    }
-})
-
-
-
+router.route("/search/:search").get(async (req, res) => {
+  try {
+    const { search } = req.params;
+    const doc = await forums.find({
+      $or: [{ title: { $regex: search, $options: "i" } }],
+    });
+    res.status(200).json(doc);
+  } catch (error) {
+    next(error);
+  }
+});
 
 // cron.schedule('* * * * *', async function () {
 
