@@ -2,30 +2,33 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const Assignment = mongoose.Schema({
-  //   activity: {
-  //                 type: Schema.Types.ObjectId,
-  //                 ref: 'CourseActivity',
-  //             },
+  activity: {
+    type: Schema.Types.ObjectId,
+    ref: "CourseActivity",
+  },
+  related_activity: String,
   title: String,
-  Assignmentfile: 
-    String,
-  //   workFiles : [
-  //     {user: {type: Schema.Types.ObjectId, ref: 'User'},
-  //      file:{url:String,
-  //            date:{type: Date,default: Date.now}
-  //           }
-  //     }],
-  //   CorrectionFile: [{
-  //             url:String,
-  //            name:String
-  //           }],
+  Assignmentfile: String,
+  workFiles: [
+    {
+      user: { type: Schema.Types.ObjectId, ref: "User" },
+      file: { url: String, date: { type: Date, default: Date.now } },
+    },
+  ],
+  CorrectionFile: [
+    {
+      url: String,
+      name: String,
+    },
+  ],
   description: String,
 
   dateLimite: Date,
-  //   dateCreation: {
-  //     type: Date,
-  //     default: new Date(),
-  //   },
+  dateCreation: {
+    type: Date,
+    default: new Date(),
+    require: true,
+  },
   //  comments: [
   //         {
   //             user: {

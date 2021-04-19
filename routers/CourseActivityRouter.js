@@ -14,4 +14,13 @@ router
   .patch(Activities.UpdateActivity)
   .get(Activities.GetActivity);
 
+router.route("/sort").get(async (req, res, next) => {
+  try {
+    const doc = await forums.find().sort({ like: -1 });
+
+    res.status(200).json(doc);
+  } catch (error) {
+    next(error);
+  }
+});
 module.exports = router;
