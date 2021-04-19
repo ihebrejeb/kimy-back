@@ -10,6 +10,7 @@ const CourseActivity = mongoose.Schema({
   description: String,
   nbSeances: Number,
   ressources: String,
+
   comments: [
         {
             user: {
@@ -29,6 +30,7 @@ const CourseActivity = mongoose.Schema({
             }
         }
     ],
+
   date: {type:Date,default:Date.now()}
 });
 
