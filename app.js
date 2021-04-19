@@ -12,6 +12,7 @@ const bodyParser = require("body-parser");
 const globalErrHandler = require("./controllers/errorController");
 const AppError = require("./utils/appError");
 
+
 const io = require("socket.io")(server, {
   cors: {
     origin: "*",
@@ -22,6 +23,14 @@ io.on("connection", (socket) => {
     io.emit("message", { name, message });
   });
 });
+io.on("connection", (socket) => {
+  console.log("User Online");
+
+  socket.on("canvas-data", (data) => {
+    socket.broadcast.emit("canvas-data", data);
+  });
+});
+
 
 /**
  * import routers here
@@ -34,13 +43,32 @@ const ForumRouter = require("./routers/ForumRouter");
 const roomsRouter = require("./routers/roomsRouter");
 const twilioRouter = require("./routers/twilioRouter");
 const attendanceRouter = require("./routers/attendanceRouter");
+const assignmentsRouter = require("./routers/AssignmentRouter");
 const livequizzRouter = require("./routers/livequizzRouter");
+const { connect } = require("./routers/chatRouter");
+
 /**
  * DB Config
  */
+ const  messages  = require("./models/messagesModel");
+
 const port = process.env.PORT || 4000;
 const db = process.env.DATABASE;
 
+const io = require("socket.io")(server, {
+  cors: {
+    origin: "*",
+  },
+});
+io.on("connection", (socket) => {
+  socket.on("message", ({ name, message }) => {
+    io.emit("message", { name, message });
+
+    let chatmessage = new messages ({name : name , message: message});
+    chatmessage.save()
+  });
+ 
+});
 mongoose
   .connect(db, {
     useNewUrlParser: true,
@@ -77,6 +105,7 @@ app.use("/chat", chatRouter);
 app.use("/rooms", roomsRouter);
 app.use("/twilio", twilioRouter);
 app.use("/attendance", attendanceRouter);
+app.use("/assignments", assignmentsRouter);
 /**
  *  handle undefined Routes
  */
