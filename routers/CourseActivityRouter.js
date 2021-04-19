@@ -29,7 +29,7 @@ router.route("/search/:search").get(async (req, res, next) => {
 
 router.route("/sort").get(async (req, res, next) => {
   try {
-    const doc = await activity.find().sort({ title: -1 });
+    const doc = await activity.find().sort({ title: 1 });
 
     res.status(200).json(doc);
   } catch (error) {
