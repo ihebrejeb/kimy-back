@@ -21,27 +21,17 @@ router.route("/sort").get(async (req, res, next) => {
     next(error);
   }
 });
+router.route("/sortByViews").get( async ( req, res, next) => {
+  try {
 
-<<<<<<< Updated upstream
-=======
-      res.status(200).json(doc);
-    } catch (error) {
-      next(error);
-    }
-  })   
-  router.route("/sortByViews").get( async ( req, res, next) => {
-    try {
+    const doc = await forums.find().sort({ views: -1 });
 
-      const doc = await forums.find().sort({ views: -1 });
+    res.status(200).json(doc);
+  } catch (error) {
+    next(error);
+  }
+})   
 
-      res.status(200).json(doc);
-    } catch (error) {
-      next(error);
-    }
-  })   
-  
-
->>>>>>> Stashed changes
 router
   .route("/:id")
   //   .get(ForumController.getforums)
@@ -49,7 +39,6 @@ router
   .delete(ForumController.deleteforums);
 let Filter = require("bad-words");
 
-<<<<<<< Updated upstream
 router.route("/:id").get(async (req, res, next) => {
   try {
     const forum = await forums.findById(req.params.id);
@@ -62,25 +51,6 @@ router.route("/:id").get(async (req, res, next) => {
     res.status(200).json({
       status: "success",
       data: forum,
-=======
-  router.route('/:id').get(
-    async (req, res, next) => {
-        try {
-            const forum = await forums.findById(req.params.id);
-            if (!forum) {
-                return res.status(404).json({ msg: 'Post not found' })
-            }
-            forum.views = forum.views + 1;
-            forum.save();
-            res.status(200).json({
-                status: "success",
-                data: forum
-              });
-            
-        } catch (error) {
-           next(error)
-        }
->>>>>>> Stashed changes
     });
   } catch (error) {
     next(error);
