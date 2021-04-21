@@ -23,7 +23,7 @@ const Assignment = mongoose.Schema({
   ],
   description: String,
 
-  dateLimite: Date,
+  dateLimite: String,
   dateCreation: {
     type: Date,
     default: new Date(),
@@ -53,7 +53,6 @@ const Assignment = mongoose.Schema({
   //         }
   //     ],
 });
-
 
 const Assignments = mongoose.model("Assignment", Assignment);
 module.exports = Assignments;
