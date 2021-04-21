@@ -84,11 +84,27 @@ exports.getOne = (Model) => async (req, res, next) => {
   }
 };
 
+// exports.getAll = (Model) => async (req, res, next) => {
+//   try {
+//     const features = new APIFeatures(Model.find(), req.query).sort({_id : -1}).paginate();
+
+//     const doc = await features.query;
+
+//     res.status(200).json({
+//       status: "success",
+//       results: doc.length,
+//       data: doc,
+//     });
+//   } catch (error) {
+//     next(error);
+//   }
+// };
+
+
 exports.getAll = (Model) => async (req, res, next) => {
   try {
-    const features = new APIFeatures(Model.find(), req.query).sort().paginate();
+    const doc = await Model.find().sort({ _id: -1 });
 
-    const doc = await features.query;
 
     res.status(200).json({
       status: "success",

@@ -21,6 +21,36 @@ router.route("/sort").get(async (req, res, next) => {
     next(error);
   }
 });
+router.route("/sortByViews").get( async ( req, res, next) => {
+  try {
+
+    const doc = await forums.find().sort({ views: -1 });
+
+    res.status(200).json(doc);
+  } catch (error) {
+    next(error);
+  }
+})   
+router.route("/sortByRate").get( async ( req, res, next) => {
+  try {
+
+    const doc = await forums.find().sort({ avg: -1 });
+
+    res.status(200).json(doc);
+  } catch (error) {
+    next(error);
+  }
+})  
+router.route("/topPost").get( async ( req, res, next) => {
+  try {
+
+    const doc = await forums.find().sort({ comments: -1 });
+
+    res.status(200).json(doc);
+  } catch (error) {
+    next(error);
+  }
+})  
 
 router
   .route("/:id")
@@ -47,24 +77,7 @@ router.route("/:id").get(async (req, res, next) => {
   }
 });
 
-router
-  .route("/comment/:id")
-  .post(
-    [[check("text", "Text is required").not().isEmpty()]],
-    async (req, res, next) => {
-      const errors = validationResult(req);
-      if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
-      }
-      forum.views = forum.views + 1;
-      console.log("views  incremented to " + forum.views);
-      forum.save();
-      res.status(200).json({
-        status: "success",
-        data: forum,
-      });
-    }
-  );
+
 
 router
   .route("/comment/:id")
