@@ -4,8 +4,10 @@ const { check, validationResult } = require("express-validator");
 const forums = require("../models/ForumModel");
 const mongoose = require("mongoose");
 var cron = require("node-cron");
+const authController = require("../controllers/authController");
 
 const ForumController = require("../controllers/ForumController");
+router.use(authController.protect);
 
 router
   .route("/")
@@ -85,14 +87,19 @@ router
     [[check("text", "Text is required").not().isEmpty()]],
     async (req, res, next) => {
       const errors = validationResult(req);
+      const user = req.user 
       if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
       }
       try {
+        const user = req.user
         const forum = await forums.findById(req.params.id);
         var filter = new Filter();
         const newComment = {
           text: req.body.text,
+          name: user.username,
+          avatar: user.avatar,
+          user: req.user.id
         };
         var x = filter.clean(newComment.text);
 
