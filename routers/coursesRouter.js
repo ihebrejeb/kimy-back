@@ -9,12 +9,13 @@ router
   .route("/")
   .get(coursesController.getAllcourses)
   .post(coursesController.createCourse);
+  router.route("/search/:search").get(coursesController.GetCode)
+
 router
   .route("/:id")
   .get(coursesController.getCourse)
   .patch(coursesController.updateCourse)
   .delete(coursesController.deleteCourse);
 
-  
 
 module.exports = router;

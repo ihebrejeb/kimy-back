@@ -22,8 +22,9 @@ exports.deleteforums = async (req, res) => {
 }
 exports.getAllforums  = async (req, res, next) => {
     try {
+      const {courseid} = req.params
       const user = req.user
-      const doc = await forums.find({  }).sort({ _id: -1 });
+      const doc = await forums.find({ courses : courseid  }).sort({ _id: -1 });
   
   
       res.status(200).json({
@@ -49,6 +50,7 @@ exports.createforums =  async (req, res, next) => {
             text: req.body.text,
             name: user.username,
             avatar: user.avatar,
+            courses : req.body.courses,
             user: req.user.id
         })
         var x = filter.clean(newForum.text);

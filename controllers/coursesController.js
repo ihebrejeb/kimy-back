@@ -24,7 +24,7 @@ exports.getAllcourses= async( req , res , next) => {
     try {
          const user =  req.user ;
 
-         const doc = await courses.find({ creator: user }).sort({ _id: -1 }).populate("creator");
+         const doc = await courses.find({ creator: user  }).sort({ _id: -1 }).populate("creator");
     
     
         res.status(200).json({
@@ -52,4 +52,15 @@ try {
   } catch (error) {
     next(error);
   }
+}
+exports.GetCode = async(req , res ,next )=> {
+try {
+  const { search } = req.params;
+  const doc = await courses.find({
+    secretCode:search });
+  res.status(200).json(doc);
+} catch (error) {
+  next(error);
+}
+
 }

@@ -11,8 +11,9 @@ router.use(authController.protect);
 
 router
   .route("/")
-  .get(ForumController.getAllforums)
+  
   .post(ForumController.createforums);
+
 
 router.route("/sort").get(async (req, res, next) => {
   try {
@@ -79,6 +80,7 @@ router.route("/:id").get(async (req, res, next) => {
   }
 });
 
+router.route("/getbyCourse/:courseid").get(ForumController.getAllforums)
 
 
 router

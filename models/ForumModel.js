@@ -8,11 +8,16 @@ const ForumSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'User'
     },
+    courses : {
+        type: Schema.Types.ObjectId,
+        ref: 'courses'
+    },
     title: {
         type: String,
         required: true
 
     },
+    
     text: {
         type: String,
         required: true
