@@ -20,6 +20,21 @@ router.route("/sortDesc").get(async (req, res, next) => {
     next(error);
   }
 });
+router.route("/:id").get(async (req, res, next) => {
+  try {
+    const forum = await assignment.findById(req.params.id);
+    if (!forum) {
+      return res.status(404).json({ msg: "Post not found" });
+    }
+    res.status(200).json({
+      status: "success",
+      data: forum,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
 router
   .route("/")
   .get(Assignments.GetAllAssignments)
