@@ -43,8 +43,8 @@ router.route("/sortByRate").get( async ( req, res, next) => {
 })  
 router.route("/topPost").get( async ( req, res, next) => {
   try {
-
-    const doc = await forums.find().sort({ comments: -1 });
+    const com = forums.comments
+    const doc = await forums.find().sort({ com :-1  }).limit(1);
 
     res.status(200).json(doc);
   } catch (error) {
