@@ -18,29 +18,44 @@ const io = require("socket.io")(server, {
   },
 });
 io.on("connection", (socket) => {
-  socket.on("message", ({ name, message }) => {
-    io.emit("message", { name, message });
+  console.log("User Online");
+
+  socket.on("canvas-data", (data) => {
+    socket.broadcast.emit("canvas-data", data);
   });
 });
 
 /**
  * import routers here
  */
-const ForumRouter = require("./routers/ForumRouter");
-
 const chatRouter = require("./routers/chatRouter");
 const userRouter = require("./routers/userRouter");
 const coursesRouter = require("./routers/coursesRouter");
+const coursesActivityRouter = require("./routers/CourseActivityRouter");
+const ForumRouter = require("./routers/ForumRouter");
 const roomsRouter = require("./routers/roomsRouter");
 const twilioRouter = require("./routers/twilioRouter");
 const attendanceRouter = require("./routers/attendanceRouter");
+const assignmentsRouter = require("./routers/AssignmentRouter");
 const livequizzRouter = require("./routers/livequizzRouter");
+const { connect } = require("./routers/chatRouter");
+
 /**
  * DB Config
  */
-const port = process.env.PORT || 5000;
+const messages = require("./models/messagesModel");
+
+const port = process.env.PORT || 4000;
 const db = process.env.DATABASE;
 
+io.on("connection", (socket) => {
+  socket.on("message", ({ name, message }) => {
+    io.emit("message", { name, message });
+
+    let chatmessage = new messages({ name: name, message: message });
+    chatmessage.save();
+  });
+});
 mongoose
   .connect(db, {
     useNewUrlParser: true,
@@ -67,8 +82,9 @@ app.use(express.static(path.join(__dirname, "public")));
 /**
  * use routers here
  */
-app.use("/forum", ForumRouter);
 
+app.use("/Activity", coursesActivityRouter);
+app.use("/forum", ForumRouter);
 app.use("/courses", coursesRouter);
 app.use("/user", userRouter);
 app.use("/livequizz", livequizzRouter);
@@ -76,6 +92,7 @@ app.use("/chat", chatRouter);
 app.use("/rooms", roomsRouter);
 app.use("/twilio", twilioRouter);
 app.use("/attendance", attendanceRouter);
+app.use("/assignments", assignmentsRouter);
 /**
  *  handle undefined Routes
  */

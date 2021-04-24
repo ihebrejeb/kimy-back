@@ -61,6 +61,7 @@ const updateOne = (User) => async (req, res, next) => {
   }
 };
 
+
 exports.getAllUsers = base.getAll(User);
 exports.getUser = base.getOne(User);
 
