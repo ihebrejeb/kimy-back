@@ -103,6 +103,7 @@ exports.getOne = (Model) => async (req, res, next) => {
 
 exports.getAll = (Model) => async (req, res, next) => {
   try {
+    
     const doc = await Model.find().sort({ _id: -1 });
 
 
