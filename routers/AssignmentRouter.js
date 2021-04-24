@@ -22,17 +22,24 @@ router.route("/sortDesc").get(async (req, res, next) => {
 });
 router.route("/:id").get(async (req, res, next) => {
   try {
-    const forum = await assignment.findById(req.params.id);
-    if (!forum) {
-      return res.status(404).json({ msg: "Post not found" });
+    const ass = await assignment.findById(req.params.id);
+    if (!ass) {
+      return res.status(404).json({ msg: "" });
     }
     res.status(200).json({
       status: "success",
-      data: forum,
+      data: ass,
     });
   } catch (error) {
     next(error);
   }
+});
+router.get("/assignments", function (req, res) {
+  res.send({
+    type: "GET",
+    name: req.body.title,
+    roll: req.body.roll,
+  });
 });
 
 router
