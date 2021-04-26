@@ -26,9 +26,13 @@ const liveQuizzSchema = new mongoose.Schema({
   optionFive: {
     type: String,
   },
+  optionCorrect: {
+    type: String,
+  },
   answer: [{
     username: String,
-    answernumber: Number,
+    answervalue: String,
+    correct: Boolean,
   }],
   
 });
