@@ -8,7 +8,7 @@ const Assignment = mongoose.Schema({
   },
   related_activity: String,
   title: String,
-  Assignmentfile: String,
+  Assignmentfile: [String],
   workFiles: [
     {
       user: { type: Schema.Types.ObjectId, ref: "User" },
@@ -26,7 +26,7 @@ const Assignment = mongoose.Schema({
   dateLimite: String,
   dateCreation: {
     type: Date,
-    default: new Date(),
+    default: Date.now(),
     require: true,
   },
 

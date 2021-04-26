@@ -20,6 +20,28 @@ router.route("/sortDesc").get(async (req, res, next) => {
     next(error);
   }
 });
+router.route("/:id").get(async (req, res, next) => {
+  try {
+    const ass = await assignment.findById(req.params.id);
+    if (!ass) {
+      return res.status(404).json({ msg: "" });
+    }
+    res.status(200).json({
+      status: "success",
+      data: ass,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+router.get("/assignments", function (req, res) {
+  res.send({
+    type: "GET",
+    name: req.body.title,
+    roll: req.body.roll,
+  });
+});
+
 router
   .route("/")
   .get(Assignments.GetAllAssignments)
