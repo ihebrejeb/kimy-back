@@ -38,7 +38,6 @@ const updateOne = (User) => async (req, res, next) => {
       new: true,
       runValidators: true,
     });
-
     if (!doc) {
       return next(
         new AppError(404, "fail", "No document found with that id"),
@@ -60,7 +59,6 @@ const updateOne = (User) => async (req, res, next) => {
     next(error);
   }
 };
-
 
 exports.getAllUsers = base.getAll(User);
 exports.getUser = base.getOne(User);
