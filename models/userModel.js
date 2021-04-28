@@ -36,6 +36,10 @@ avatar : String ,
       message: "Your password and confirmation password are not the same",
     },
   },
+  isgoogle: {
+    type: Boolean,
+    default: false,
+  },
  /*  role: {
     type: String,
     enum: ["admin", "teacher", "student"],

@@ -63,6 +63,49 @@ exports.login = async (req, res, next) => {
   }
 };
 
+exports.loging = async (req, res, next) => {
+  try {
+    const { email } = req.body;
+
+    // 1) check if email and password exist
+    if (!email) {
+      return next(
+        new AppError(404, "fail", "Please provide email or password"),
+        req,
+        res,
+        next
+      );
+    }
+
+    // 2) check if user exist and password is correct
+    const user = await User.findOne({
+      email,
+    });
+
+    if (!user) {
+      return next(
+        new AppError(401, "fail", "Email or Password is wrong"),
+        req,
+        res,
+        next
+      );
+    }
+
+    // 3) All correct, send jwt to client
+    const token = createToken(user.id);
+
+    res.status(200).json({
+      status: "success",
+      token,
+      data: {
+        user,
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
 exports.signup = async (req, res, next) => {
   try {
     const user = await User.create({
@@ -72,11 +115,37 @@ exports.signup = async (req, res, next) => {
       passwordConfirm: req.body.passwordConfirm,
       birthdate: req.body.birthdate,
       avatar: req.body.avatar,
+      
     });
 
     const token = createToken(user.id);
 
     user.password = undefined;
+
+    res.status(201).json({
+      status: "success",
+      token,
+      data: {
+        user,
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.signupg = async (req, res, next) => {
+  try {
+    const user = await User.create({
+      username: req.body.username,
+      email: req.body.email,
+      birthdate: req.body.birthdate,
+      avatar: req.body.avatar,
+      isgoogle: req.body.isgoogle,
+    });
+
+    const token = createToken(user.id);
+
 
     res.status(201).json({
       status: "success",
@@ -121,6 +190,55 @@ exports.updatepassword = async (req, res, next) => {
 
     // Remove the password from the output
     newpasswordt = await bcrypt.hash(newpassword, 12);
+    user.password = newpasswordt;
+
+    usert = await User.findByIdAndUpdate(user.id, user, {
+      new: true,
+      runValidators: true,
+    });
+
+    res.status(200).json({
+      status: "success",
+      data: {
+        usert,
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.updatepass = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+
+    // 1) check if email and password exist
+    if (!email) {
+      return next(
+        new AppError(404, "fail", "Please provide email or password"),
+        req,
+        res,
+        next
+      );
+    }
+
+    // 2) check if user exist and password is correct
+    const user = await User.findOne({
+      email,
+    });
+
+    if (!user) {
+      return next(
+        new AppError(401, "fail", "Email or Password is wrong"),
+        req,
+        res,
+        next
+      );
+    }
+
+
+    // Remove the password from the output
+    newpasswordt = await bcrypt.hash(password, 12);
     user.password = newpasswordt;
 
     usert = await User.findByIdAndUpdate(user.id, user, {
