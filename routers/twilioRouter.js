@@ -2,6 +2,7 @@
 const {
   jwt: { AccessToken },
 } = require("twilio");
+const { Worker } = require("worker_threads");
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const client = require("twilio")(accountSid, authToken);
@@ -9,7 +10,8 @@ const VideoGrant = AccessToken.VideoGrant;
 const MAX_ALLOWED_SESSION_DURATION = 14400;
 const express = require("express");
 const router = express.Router();
-
+const db = process.env.DATABASE;
+const Room = require("../models/Room");
 router.route("/token").post(function (request, response) {
   const { identity, room } = request.body;
   const token = new AccessToken(
@@ -88,5 +90,36 @@ router.route("/getVideo/:roomId").get((req, res) => {
       res.send(err);
     });
 });
+router.route("/createStats/:roomId").get((req, res) => {
+  const { roomId } = req.params;
 
+  client.video.compositions
+    .list({
+      roomSid: roomId,
+    })
+    .then((compositions) => {
+      let link = compositions[0].links.media;
+      client
+        .request({
+          method: "GET",
+          uri: link,
+        })
+        .then(async (response) => {
+          let worker = new Worker("./ai/videofacerecognition/fr.js", {
+            workerData: { response, roomId, db },
+          });
+          let room = await Room.findOne({ roomSID: roomId });
+          room.processing = true;
+          await room.save();
+          res.send(room);
+        })
+        .catch((error) => {
+          console.log("Error fetching /Media resource " + error);
+          res.send(error);
+        });
+    })
+    .catch((err) => {
+      res.send(err);
+    });
+});
 module.exports = router;

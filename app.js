@@ -38,7 +38,6 @@ const twilioRouter = require("./routers/twilioRouter");
 const attendanceRouter = require("./routers/attendanceRouter");
 const assignmentsRouter = require("./routers/AssignmentRouter");
 const livequizzRouter = require("./routers/livequizzRouter");
-const { connect } = require("./routers/chatRouter");
 
 /**
  * DB Config

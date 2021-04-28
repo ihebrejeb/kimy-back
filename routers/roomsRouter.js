@@ -25,4 +25,9 @@ router.route("/:roomSID").delete(async (req, res) => {
   const data = await room.deleteOne({ roomSID });
   res.json(data);
 });
+router.route("/one/:roomId").get(async (req, res) => {
+  const { roomId } = req.params;
+  const data = await room.findById(roomId);
+  res.json(data);
+});
 module.exports = router;
