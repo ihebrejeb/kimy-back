@@ -45,6 +45,7 @@ const { connect } = require("./routers/chatRouter");
  */
 const messages = require("./models/messagesModel");
 const Livequiz = require("./models/liveQuizzModel");
+const User = require("./models/userModel");
 
 const port = process.env.PORT || 4000;
 const db = process.env.DATABASE;
@@ -70,6 +71,21 @@ io.on("connection", (socket) => {
     doc.answer.push({username: username, answervalue: answer, correct: corect})
     await doc.save()
     io.emit("new answer quizz", { doc, corect });
+   
+  });
+
+  socket.on("find me user", async({ email })  =>  {
+    console.log(email)
+    const user = await User.findOne({
+      email,
+    });
+    console.log(user)
+    let mybool= false
+    if(user){
+      mybool= true
+    }
+    console.log(mybool)
+    io.emit("result of user", { mybool });
    
   });
   
