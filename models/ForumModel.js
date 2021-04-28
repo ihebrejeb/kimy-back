@@ -4,15 +4,20 @@ const bcrypt = require("bcryptjs");
 const Schema = mongoose.Schema;
 
 const ForumSchema = new Schema({ 
-    user: {
+    creator: {
         type: Schema.Types.ObjectId,
         ref: 'User'
+    },
+    courses : {
+        type: Schema.Types.ObjectId,
+        ref: 'courses'
     },
     title: {
         type: String,
         required: true
 
     },
+    
     text: {
         type: String,
         required: true
@@ -62,7 +67,7 @@ const ForumSchema = new Schema({
     ],
     comments: [
         {
-            user: {
+            commenter: {
                 type: Schema.Types.ObjectId,
                 ref: 'User'
             },

@@ -4,6 +4,15 @@ var router = express.Router();
 const Activities = require("../controllers/CourseActivityController");
 const activity = require("../models/CourseActivityModel");
 
+router.route("/sort").get(async (req, res, next) => {
+  try {
+    const doc = await activity.find().sort({ title: -1 });
+
+    res.status(200).json(doc);
+  } catch (error) {
+    next(error);
+  }
+});
 router
   .route("/")
   .get(Activities.GetAllActivities)
@@ -27,14 +36,4 @@ router.route("/search/:search").get(async (req, res, next) => {
   }
 });
 
-router.route("/sort").get(async (req, res, next) => {
-  try {
-    const doc = await activity.find().sort({ title: 1 });
-
-
-    res.status(200).json(doc);
-  } catch (error) {
-    next(error);
-  }
-});
 module.exports = router;

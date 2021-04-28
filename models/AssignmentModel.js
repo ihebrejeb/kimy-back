@@ -8,7 +8,7 @@ const Assignment = mongoose.Schema({
   },
   related_activity: String,
   title: String,
-  Assignmentfile: String,
+  Assignmentfile: [String],
   workFiles: [
     {
       user: { type: Schema.Types.ObjectId, ref: "User" },
@@ -23,10 +23,10 @@ const Assignment = mongoose.Schema({
   ],
   description: String,
 
-  dateLimite: Date,
+  dateLimite: String,
   dateCreation: {
     type: Date,
-    default: new Date(),
+    default: Date.now(),
     require: true,
   },
 
@@ -53,7 +53,6 @@ const Assignment = mongoose.Schema({
   //         }
   //     ],
 });
-
 
 const Assignments = mongoose.model("Assignment", Assignment);
 module.exports = Assignments;

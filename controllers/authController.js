@@ -2,6 +2,8 @@ const { promisify } = require("util");
 const jwt = require("jsonwebtoken");
 const User = require("../models/userModel");
 const AppError = require("../utils/appError");
+const bcrypt = require("bcryptjs");
+const base = require("./baseController");
 
 const createToken = (id) => {
   return jwt.sign(
@@ -64,11 +66,12 @@ exports.login = async (req, res, next) => {
 exports.signup = async (req, res, next) => {
   try {
     const user = await User.create({
-      name: req.body.name,
+      username: req.body.username,
       email: req.body.email,
       password: req.body.password,
       passwordConfirm: req.body.passwordConfirm,
-      role: req.body.role,
+      birthdate: req.body.birthdate,
+      avatar: req.body.avatar,
     });
 
     const token = createToken(user.id);
@@ -80,6 +83,55 @@ exports.signup = async (req, res, next) => {
       token,
       data: {
         user,
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.updatepassword = async (req, res, next) => {
+  try {
+    const { id, email, password, newpassword } = req.body;
+
+    // 1) check if email and password exist
+    if (!email || !password) {
+      return next(
+        new AppError(404, "fail", "Please provide email or password"),
+        req,
+        res,
+        next
+      );
+    }
+
+    // 2) check if user exist and password is correct
+    const user = await User.findOne({
+      email,
+    }).select("+password");
+
+    if (!user || !(await user.correctPassword(password, user.password))) {
+      return next(
+        new AppError(401, "fail", "Email or Password is wrong"),
+        req,
+        res,
+        next
+      );
+    }
+
+
+    // Remove the password from the output
+    newpasswordt = await bcrypt.hash(newpassword, 12);
+    user.password = newpasswordt;
+
+    usert = await User.findByIdAndUpdate(user.id, user, {
+      new: true,
+      runValidators: true,
+    });
+
+    res.status(200).json({
+      status: "success",
+      data: {
+        usert,
       },
     });
   } catch (err) {

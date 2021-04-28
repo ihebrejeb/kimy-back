@@ -3,7 +3,7 @@ const validator = require("validator");
 const bcrypt = require("bcryptjs");
 
 const userSchema = new mongoose.Schema({
-  name: {
+  username: {
     type: String,
     required: [true, "Please fill your username"],
   },
@@ -19,16 +19,15 @@ const userSchema = new mongoose.Schema({
     default : new Date()
 
 },
-selectedFile : String ,
+avatar : String ,
   password: {
     type: String,
-    required: [true, "Please fill your password"],
     minLength: 6,
     select: false,
   },
   passwordConfirm: {
     type: String,
-    required: [true, "Please fill your password confirm"],
+    //required: [true, "Please fill your password confirm"],
     validate: {
       validator: function (el) {
         // "this" works only on create and save
@@ -61,7 +60,7 @@ userSchema.pre("save", async function (next) {
   this.password = await bcrypt.hash(this.password, 12);
 
   // Delete passwordConfirm field
-  this.passwordConfirm = undefined;
+  // this.passwordConfirm = undefined;
   next();
 });
 

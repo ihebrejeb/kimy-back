@@ -43,18 +43,42 @@ const livequizzRouter = require("./routers/livequizzRouter");
  * DB Config
  */
 const messages = require("./models/messagesModel");
+const Livequiz = require("./models/liveQuizzModel");
 
 const port = process.env.PORT || 4000;
 const db = process.env.DATABASE;
 
 io.on("connection", (socket) => {
+
   socket.on("message", ({ name, message }) => {
     io.emit("message", { name, message });
 
     let chatmessage = new messages({ name: name, message: message });
     chatmessage.save();
   });
+
+  socket.on("new live quizz", ({ question, optionOne, optionTwo, optionThree, optionFour, optionFive, optionCorrect }) => {
+    let livequiz = new Livequiz({ question: question, optionOne: optionOne, optionTwo: optionTwo, optionThree: optionThree, optionFour: optionFour, optionFive: optionFive, optionCorrect: optionCorrect });
+    io.emit("new live quizz", { livequiz });
+    livequiz.save();
+  });
+  
+  socket.on("new answer quizz", async({ username, answer, livequi, corect })  =>  {
+    const doc = await Livequiz.findOne({_id:livequi._id})
+    console.log(doc)
+    doc.answer.push({username: username, answervalue: answer, correct: corect})
+    await doc.save()
+    io.emit("new answer quizz", { doc, corect });
+   
+  });
+  
+  socket.on("finished quizz", ({}) => {
+    io.emit("finished quizz", { });
+  });
+  
 });
+
+
 mongoose
   .connect(db, {
     useNewUrlParser: true,
