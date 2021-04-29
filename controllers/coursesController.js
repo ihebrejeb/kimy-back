@@ -53,6 +53,19 @@ try {
     next(error);
   }
 }
+exports.enrollStudent = async (req , res ,next) => {
+
+  try  {
+    const user = req.user
+    
+
+  }
+  catch(error){
+    next(error)
+  }
+}
+
+
 exports.GetCode = async(req , res ,next )=> {
 try {
   const { search } = req.params;

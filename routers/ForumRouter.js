@@ -7,7 +7,7 @@ var cron = require("node-cron");
 const authController = require("../controllers/authController");
 
 const ForumController = require("../controllers/ForumController");
-router.use(authController.protect);
+//  router.use(authController.protect);
 
 router
   .route("/")
@@ -44,10 +44,12 @@ router.route("/sortByRate").get( async ( req, res, next) => {
     next(error);
   }
 })  
-router.route("/topPost").get( async ( req, res, next) => {
+router.route("/topPost/:courseid").get( async ( req, res, next) => {
   try {
+    const {courseid} = req.params
+
     const com = forums.comments
-    const doc = await forums.find().sort({ com :-1  }).limit(1);
+    const doc = await forums.find({ courses : courseid  }).sort({ com :-1  }).limit(1);
 
     res.status(200).json(doc);
   } catch (error) {

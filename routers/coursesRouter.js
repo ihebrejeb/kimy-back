@@ -3,14 +3,15 @@ var router = express.Router();
 const authController = require("../controllers/authController");
 
 const coursesController = require("../controllers/coursesController");
+router.route("/search/:search").get(coursesController.GetCode)
+
 router.use(authController.protect);
 
 router
   .route("/")
   .get(coursesController.getAllcourses)
   .post(coursesController.createCourse);
-  router.route("/search/:search").get(coursesController.GetCode)
-
+  
 router
   .route("/:id")
   .get(coursesController.getCourse)
