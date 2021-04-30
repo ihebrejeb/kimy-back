@@ -1,21 +1,31 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
 const bcrypt = require("bcryptjs");
-const value = Math.floor(Math.random()*100)
+const { v4: uuidv4 } = require('uuid');
+const randtoken = require('rand-token');
+
 const coursesSchema = mongoose.Schema({
   creator: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
 
   title: String,
   message: String,
   secretCode: {
-    Number,
+    type : String,
+    default: function() {
+      return randtoken.generate(64);
+  }
     
   } ,
-  Students : [
-    { type: mongoose.Schema.Types.ObjectId, ref: "User" }
-  ]
+  Students:
 
-  ,
+   [ 
+      
+        { type: mongoose.Schema.Types.ObjectId, ref: "User" }
+         
+  ],
+  
+
+  
   selectedFile: String,
   createdAt: {
     type: Date,
