@@ -13,11 +13,8 @@ router.route("/sort").get(async (req, res, next) => {
     next(error);
   }
 });
-router
-  .route("/")
-  .get(Activities.GetAllActivities)
-  .post(Activities.CreateActivity);
-
+router.route("/").post(Activities.createAct);
+router.route("/getbyCourse/:courseid").get(Activities.getAll);
 router
   .route("/:id")
   .delete(Activities.DeleteActivity)
@@ -35,5 +32,7 @@ router.route("/search/:search").get(async (req, res, next) => {
     next(error);
   }
 });
+
+router.route("/getbyCourse/:courseid").get(Activities.getAll);
 
 module.exports = router;

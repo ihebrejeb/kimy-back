@@ -10,6 +10,10 @@ const CourseActivity = mongoose.Schema({
   //     },
   //   ],
   file: [String],
+  courses: {
+    type: Schema.Types.ObjectId,
+    ref: "courses",
+  },
   videos: [{ type: mongoose.Schema.Types.ObjectId, ref: "room" }],
   assignments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Assignment" }],
 
