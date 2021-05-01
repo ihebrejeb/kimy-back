@@ -22,10 +22,8 @@
     "node-code-generator": "^1.0.3",
     "node-cron": "^3.0.0",
     "nodemon": "^2.0.7",
-    "rand-token": "^1.0.1",
     "socket.io": "^4.0.0",
     "twilio": "^3.58.0",
-    "uuid": "^8.3.2",
     "validator": "^13.5.2"
   },
   "devDependencies": {
