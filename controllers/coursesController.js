@@ -1,7 +1,6 @@
 const base = require("./baseController");
 const courses = require("../models/coursesModel");
 const mongoose = require("mongoose"); 
-const { v4: uuidv4 } = require('uuid');
 
 // exports.getAllcourses = base.getAll(courses) ;
 exports.getCourse = base.getOne(courses);
