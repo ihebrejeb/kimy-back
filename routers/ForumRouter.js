@@ -7,7 +7,7 @@ var cron = require("node-cron");
 const authController = require("../controllers/authController");
 
 const ForumController = require("../controllers/ForumController");
-//  router.use(authController.protect);
+  router.use(authController.protect);
 
 router
   .route("/")
