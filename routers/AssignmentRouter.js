@@ -41,11 +41,11 @@ router.get("/assignments", function (req, res) {
     roll: req.body.roll,
   });
 });
+router.route("/").post(Assignments.createAss);
+router.route("/getbyActivity/:activityid").get(Assignments.getAll);
 
-router
-  .route("/")
-  .get(Assignments.GetAllAssignments)
-  .post(Assignments.CreateAssignment);
+router.route("/").get(Assignments.GetAllAssignments);
+// .post(Assignments.CreateAssignment);
 
 router
   .route("/:id")

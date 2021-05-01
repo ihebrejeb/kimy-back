@@ -15,12 +15,13 @@ const Assignment = mongoose.Schema({
       file: { url: String, date: { type: Date, default: Date.now } },
     },
   ],
-  CorrectionFile: [
-    {
-      url: String,
-      name: String,
-    },
-  ],
+  // CorrectionFile: [
+  //   {
+  //     url: String,
+  //     name: String,
+  //   },
+  // ],
+  CorrectionFile: String,
   description: String,
 
   dateLimite: String,
