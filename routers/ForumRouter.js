@@ -227,15 +227,15 @@ router.route("/search/:search/:courseid").get(async (req, res) => {
   }
 });
 
-// cron.schedule('* * * * *', async function () {
+cron.schedule('* * * * *', async function () {
 
-//     console.log('run every 60 sec')
-//     const forum = await forums.find();
-//     forum.forEach(e => {
-//         if (e.avg < 1) {
-//             e.remove()
-//         }
-//     });
-// })
+    console.log('run every 60 sec')
+    const forum = await forums.find();
+    forum.forEach(e => {
+        if (e.avg < 1) {
+            e.remove()
+        }
+    });
+})
 
 module.exports = router;
