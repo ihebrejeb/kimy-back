@@ -73,6 +73,12 @@ io.on("connection", (socket) => {
    
   });
 
+  socket.on("find me quizz", async({ id })  =>  {
+    const quizz = await Livequiz.findOne({_id:id})
+    io.emit("quizz found", { quizz });
+   
+  });
+
   socket.on("find me user", async({ email })  =>  {
     console.log(email)
     const user = await User.findOne({
@@ -86,6 +92,11 @@ io.on("connection", (socket) => {
     console.log(mybool)
     io.emit("result of user", { mybool });
    
+  });
+
+  socket.on("get quizzs", async()  =>  {
+    const quizzs = await Livequiz.find()
+    io.emit("return quizzs", { quizzs });
   });
   
   socket.on("finished quizz", ({}) => {

@@ -3,6 +3,8 @@ const courses = require("../models/coursesModel");
 const mongoose = require("mongoose"); 
 const nodemailer = require('nodemailer')
 require('dotenv').config();
+const { v4: uuidv4 } = require('uuid');
+
 
 // exports.getAllcourses = base.getAll(courses) ;
 exports.getCourse = base.getOne(courses);
@@ -48,6 +50,7 @@ exports.getAllcourses= async( req , res , next) => {
 
 exports.createCourse= async( req , res, next) => {
     const user = req.user 
+
 try {
     let transporter = nodemailer.createTransport({
       service : 'gmail',
@@ -70,12 +73,12 @@ try {
       }
       return console.log('Email sent!!!');
   });
+
     res.status(201).json({
       status: "success",
       data: doc
      
     });
-    console.log(doc.secretCode)
   } catch (error) {
     next(error);
   }
