@@ -1,7 +1,10 @@
 const base = require("./baseController");
 const courses = require("../models/coursesModel");
 const mongoose = require("mongoose"); 
+const nodemailer = require('nodemailer')
+require('dotenv').config();
 const { v4: uuidv4 } = require('uuid');
+
 
 // exports.getAllcourses = base.getAll(courses) ;
 exports.getCourse = base.getOne(courses);
@@ -46,17 +49,36 @@ exports.getAllcourses= async( req , res , next) => {
 }
 
 exports.createCourse= async( req , res, next) => {
-    
-try {
     const user = req.user 
+
+try {
+    let transporter = nodemailer.createTransport({
+      service : 'gmail',
+      auth : {
+        user : 'kimyschool2021@gmail.com',
+        pass:'kimy2021',
+      }
+    });
+  
     const doc = await courses.create({...req.body , creator : user  });
+    let mailOptions = {
+      from: 'kimyschool2021@gmail.com', // TODO: email sender
+      to: "mohamedhabib.dridi@esprit.tn", // TODO: email receiver
+      subject: 'your course secret code',
+      text: `the secret code for your course under the namme (${doc.title}) is ==> secret code ${doc.secretCode}`
+    };
+    transporter.sendMail(mailOptions, (err, data) => {
+      if (err) {
+          return console.log('Error occurs',err);
+      }
+      return console.log('Email sent!!!');
+  });
 
     res.status(201).json({
       status: "success",
       data: doc
      
     });
-    console.log(data)
   } catch (error) {
     next(error);
   }

@@ -15,29 +15,35 @@ router
   .post(ForumController.createforums);
 
 
-router.route("/sort").get(async (req, res, next) => {
+router.route("/sort/:courseid").get(async (req, res, next) => {
+  const {courseid} = req.params
+
   try {
-    const doc = await forums.find().sort({ like: -1 });
+    const doc = await forums.find({ courses : courseid  }).sort({ like: -1 });
 
     res.status(200).json(doc);
   } catch (error) {
     next(error);
   }
 });
-router.route("/sortByViews").get( async ( req, res, next) => {
+router.route("/sortByViews/:courseid").get( async ( req, res, next) => {
+  const {courseid} = req.params
+
   try {
 
-    const doc = await forums.find().sort({ views: -1 });
+    const doc = await forums.find({ courses : courseid  }).sort({ views: -1 });
 
     res.status(200).json(doc);
   } catch (error) {
     next(error);
   }
 })   
-router.route("/sortByRate").get( async ( req, res, next) => {
+router.route("/sortByRate/:courseid").get( async ( req, res, next) => {
+  const {courseid} = req.params
+
   try {
 
-    const doc = await forums.find().sort({ avg: -1 });
+    const doc = await forums.find({ courses : courseid  }).sort({ avg: -1 });
 
     res.status(200).json(doc);
   } catch (error) {
@@ -204,11 +210,16 @@ router.route("/rate/:id").post(async (req, res) => {
   }
 });
 
-router.route("/search/:search").get(async (req, res) => {
+router.route("/search/:search/:courseid").get(async (req, res) => {
   try {
+    const {courseid} = req.params
+
     const { search } = req.params;
     const doc = await forums.find({
-      $or: [{ title: { $regex: search, $options: "i" } }],
+      $and: [{ title: { $regex: search, $options: "i" } },
+     {
+      courses : courseid 
+     }],
     });
     res.status(200).json(doc);
   } catch (error) {
@@ -216,15 +227,15 @@ router.route("/search/:search").get(async (req, res) => {
   }
 });
 
-// cron.schedule('* * * * *', async function () {
+cron.schedule('* * * * *', async function () {
 
-//     console.log('run every 60 sec')
-//     const forum = await forums.find();
-//     forum.forEach(e => {
-//         if (e.avg < 1) {
-//             e.remove()
-//         }
-//     });
-// })
+    console.log('run every 60 sec')
+    const forum = await forums.find();
+    forum.forEach(e => {
+        if (e.avg < 1) {
+            e.remove()
+        }
+    });
+})
 
 module.exports = router;
