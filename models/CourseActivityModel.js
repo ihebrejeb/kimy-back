@@ -15,7 +15,8 @@ const CourseActivity = mongoose.Schema({
     ref: "courses",
   },
   videos: [{ type: mongoose.Schema.Types.ObjectId, ref: "room" }],
-  assignments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Assignment" }],
+  // assignments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Assignment" }],
+  assignments: [String],
 
   description: String,
   nbSeances: Number,
@@ -47,6 +48,5 @@ const CourseActivity = mongoose.Schema({
   ],
   date: { type: Date, default: Date.now() },
 });
-/// missing the course ID
 const CourseActivities = mongoose.model("CourseActivity", CourseActivity);
 module.exports = CourseActivities;
