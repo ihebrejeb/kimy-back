@@ -90,7 +90,7 @@ router.route("/getVideo/:roomId").get((req, res) => {
       res.send(err);
     });
 });
-router.route("/createStats/:roomId").get((req, res) => {
+router.route("/createStats/:roomId").get(async (req, res) => {
   const { roomId } = req.params;
 
   client.video.compositions
@@ -108,18 +108,15 @@ router.route("/createStats/:roomId").get((req, res) => {
           let worker = new Worker("./ai/videofacerecognition/fr.js", {
             workerData: { response, roomId, db },
           });
-          let room = await Room.findOne({ roomSID: roomId });
-          room.processing = true;
-          await room.save();
-          res.send(room);
         })
         .catch((error) => {
           console.log("Error fetching /Media resource " + error);
-          res.send(error);
         });
     })
-    .catch((err) => {
-      res.send(err);
-    });
+    .catch((err) => {});
+  let room = await Room.findOne({ roomSID: roomId });
+  room.processing = true;
+  await room.save();
+  res.json({ data: room });
 });
 module.exports = router;
