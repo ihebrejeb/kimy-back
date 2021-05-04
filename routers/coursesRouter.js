@@ -7,6 +7,7 @@ const coursesController = require("../controllers/coursesController");
 router.route("/search/:search").get(coursesController.GetCode)
 router.use(authController.protect);
 router.route("/enroll/:id").post(coursesController.enrollStudent)
+router.route("/kick/:id").post(coursesController.kick)
 
 
 router
