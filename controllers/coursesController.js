@@ -1,5 +1,5 @@
 const base = require("./baseController");
-const courses = require("../models/coursesModel");
+const courses = require("../models/CoursesModel");
 const mongoose = require("mongoose");
 const nodemailer = require("nodemailer");
 require("dotenv").config();
@@ -86,69 +86,57 @@ exports.createCourse = async (req, res, next) => {
 };
 
 exports.enrollStudent = async (req, res, next) => {
-  
   const { id } = req.params;
 
   try {
     const users = req.user;
-   
+
     const course = await courses.findById(id);
-    
-    if(course) {
-         const found =  await courses.find({'_id':req.params.id,'Students':users})
-         if(found.length>0) 
-         
-         console.log("enrolled")
-         else if (found.length===0) {
-        
-      course.Students.push(users);
-      await course.save();
-      console.log(course);
-      res.status(200).json({
-        status: "success",
-        data: course,
-      }); 
-    
-    } }
-  
+
+    if (course) {
+      const found = await courses.find({ _id: req.params.id, Students: users });
+      if (found.length > 0) console.log("enrolled");
+      else if (found.length === 0) {
+        course.Students.push(users);
+        await course.save();
+        console.log(course);
+        res.status(200).json({
+          status: "success",
+          data: course,
+        });
+      }
+    }
   } catch (error) {
     next(error);
     // console.log(course)
   }
 };
 
-exports.kick = async (req,res,next) => {
+exports.kick = async (req, res, next) => {
   const user = req.user;
   const { id } = req.params;
 
   const course = await courses.findById(id);
-  try{
-    if(course) {
-      const found =  await courses.find({'_id':req.params.id,'Students':user})
-      if(found.length>0)  { 
-      
-      const removeindex = course.Students 
+  try {
+    if (course) {
+      const found = await courses.find({ _id: req.params.id, Students: user });
+      if (found.length > 0) {
+        const removeindex = course.Students;
 
-      await course.save();
-      console.log(course);
-      res.status(200).json({
-        status: "success",
-        data: course,
-      });  }    
-       else if (found.length===0) {
-            console.log("no user")
-        }
- 
- } 
-
-}
-    
-  
-  catch (error ){
- next(error)
+        await course.save();
+        console.log(course);
+        res.status(200).json({
+          status: "success",
+          data: course,
+        });
+      } else if (found.length === 0) {
+        console.log("no user");
+      }
+    }
+  } catch (error) {
+    next(error);
   }
-
-}
+};
 exports.GetCode = async (req, res, next) => {
   try {
     const { search } = req.params;
