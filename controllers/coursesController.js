@@ -66,7 +66,7 @@ exports.createCourse = async (req, res, next) => {
     const doc = await courses.create({ ...req.body, creator: user });
     let mailOptions = {
       from: "kimyschool2021@gmail.com", // TODO: email sender
-      to: "mohamedhabib.dridi@esprit.tn", // TODO: email receiver
+      to: user.email, // TODO: email receiver
       subject: "your course secret code",
       text: `the secret code for your course under the namme (${doc.title}) is ==> secret code ${doc.secretCode}`,
     };
